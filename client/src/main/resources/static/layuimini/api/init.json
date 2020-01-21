@@ -1,0 +1,58 @@
+{
+  "clearInfo": {
+    "clearUrl": "api/clear.json"
+  },
+  "homeInfo": {
+    "title": "首页",
+    "icon": "fa fa-home",
+    "href": "layuimini/page/welcome-1.html?mpi=m-p-i-0"
+  },
+  "logoInfo": {
+    "title": "订餐管理后台",
+    "image": "layuimini/images/logo.png",
+    "href": ""
+  },
+  "menuInfo": {
+    "currency": {
+      "title": "常规管理",
+      "icon": "fa fa-address-book",
+      "child": [
+        {
+          "title": "商品管理",
+          "href": "",
+          "icon": "fa fa-calendar",
+          "target": "_self",
+          "child": [
+            {
+              "title": "类目列表",
+              "href": "/foodService/categoryList",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            },
+            {
+              "title": "商品列表",
+              "href": "/foodService/foodList",
+              "icon": "fa fa-navicon",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "用户管理",
+          "href": "",
+          "icon": "fa fa-child",
+          "target": "_self",
+          "child": [
+            {
+              "title": "用户列表",
+              "href": "/foodService/categoryList",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+        }
+      ]
+    }
+
+  }
+}

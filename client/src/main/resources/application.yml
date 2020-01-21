@@ -1,0 +1,13 @@
+server:
+  port: 8060
+  # freemarker相关配置, 可省略
+spring:
+  freemarker:
+    suffix: .ftl
+    charset: UTF-8
+    enabled: true
+    template-loader-path: classpath:/templates/
+
+feign:
+  httpclient:
+    enabled: true
