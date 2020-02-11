@@ -44,7 +44,9 @@ public class FoodServiceImpl implements FoodService {
         }
         List<Food> foods = new ArrayList<>();
         foods.add(food);
-        return new BaseResponse(convert(foods));
+        List<FoodVO> convert = convert(foods);
+        Food target = convert.get(0);
+        return new BaseResponse(target);
     }
 
     @Override
@@ -54,6 +56,9 @@ public class FoodServiceImpl implements FoodService {
         Example.Criteria criteria = example.createCriteria();
         if(food != null && Strings.isNotBlank(food.getTitle())){
             criteria.andLike("title", "%" + food.getTitle() + "%");
+        }
+        if(food != null && food.getcId() != null){
+            criteria.andEqualTo("cId", food.getcId());
         }
         PageHelper.startPage(pageRequest.getPage(), pageRequest.getLimit());
         Page<Food> foods = (Page)foodMapper.selectByExample(example);

@@ -1,7 +1,7 @@
-package scau.zns.user.vo;
+package scau.zns.selladmin.vo;
 
 
-public class UserLogInRequest{
+public class UserLogInRequest {
     private String name;
     private String password;
 

@@ -1,7 +1,7 @@
-package scau.zns.user.vo;
+package scau.zns.selladmin.vo;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class UserVO {
@@ -22,10 +22,11 @@ public class UserVO {
      */
     private Byte gender;
 
+
+
     /**
      * 1 普通用户  2 管理员
      */
-    @Column(name = "user_type")
     private Byte userType;
 
     /**
@@ -40,8 +41,10 @@ public class UserVO {
 
     private String token;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date updateTime;
 
     public String getId() {
@@ -83,7 +86,6 @@ public class UserVO {
     public void setUserType(Byte userType) {
         this.userType = userType;
     }
-
 
     public String getCover() {
         return cover;

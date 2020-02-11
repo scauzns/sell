@@ -23,6 +23,9 @@ public interface FoodFeignClient {
 //    BasePageResponse<FoodVO> foodList(@RequestParam("food") Food food, @RequestParam("request") BasePageRequest request);
     BasePageResponse<FoodVO> foodList(@RequestParam Map<String, Object> map);
 
+    @GetMapping(URIs.FOOD_QUERY + "/{foodId}")
+    BaseResponse queryFood(@PathVariable("foodId") Integer id);
+
     @RequestMapping(value = URIs.CATEGORY_LIST, method = RequestMethod.GET)
     BasePageResponse categorylist(@RequestParam("request") BasePageRequest request);
 

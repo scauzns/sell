@@ -1,11 +1,9 @@
-package scau.zns.user.pojo;
+package scau.zns.selladmin.vo;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 import java.util.Date;
 
 public class User {
-    @Id
+
     private String id;
 
     /**
@@ -28,11 +26,9 @@ public class User {
      */
     private String password;
 
-
     /**
      * 1 普通用户  2 管理员
      */
-    @Column(name = "user_type")
     private Byte userType;
 
 
@@ -46,10 +42,8 @@ public class User {
      */
     private Byte status;
 
-    @Column(name = "create_time")
     private Date createTime;
 
-    @Column(name = "update_time")
     private Date updateTime;
 
     public String getId() {
@@ -131,7 +125,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
 
     /**
      * 获取1 普通用户  2 管理员

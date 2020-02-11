@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +55,14 @@ public class UserServiceImpl implements UserService {
         if(user == null){
             return new BaseResponse(ResponseCode.FAILED, "用户信息不能为空！");
         }
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("name", user.getName());
+        User userSearchByName = userMapper.selectOneByExample(example);
+        if(userSearchByName != null){
+            return new BaseResponse(ResponseCode.FAILED, "用户名称已存在！");
+        }
+
         String id = sid.nextShort();
         user.setId(id);
         try {
@@ -62,18 +71,19 @@ public class UserServiceImpl implements UserService {
             logger.error("occured an error" , e);
             return new BaseResponse(ResponseCode.FAILED, e.getMessage());
         }
+        user = userMapper.selectByPrimaryKey(id);
+        UserVO vo = new UserVO();
         String token = UUID.randomUUID().toString();
-        Map<String, String> res = new HashMap<>();
-        res.put("userId", id);
-        res.put("token", token);
-        return new BaseResponse(res);
+        BeanUtils.copyProperties(user, vo);
+        vo.setToken(token);
+        return new BaseResponse(vo);
     }
 
     @Override
     @Transactional
     public BaseResponse userLogIn(UserLogInRequest logInRequest) {
         Example example = new Example(User.class);
-        example.createCriteria().andEqualTo("phone", logInRequest.getPhone());
+        example.createCriteria().andEqualTo("name", logInRequest.getName());
         User user = userMapper.selectOneByExample(example);
         if(user == null){
             return new BaseResponse(1, "账户不存在");
@@ -81,10 +91,11 @@ public class UserServiceImpl implements UserService {
         if(!logInRequest.getPassword().equals(user.getPassword())){
             return new BaseResponse(2, "密码错误！");
         }
+        UserVO vo = new UserVO();
         String token = UUID.randomUUID().toString();
-        Map<String, String> res = new HashMap<>();
-        res.put("token", token);
-        return new BaseResponse(res);
+        BeanUtils.copyProperties(user, vo);
+        vo.setToken(token);
+        return new BaseResponse(vo);
     }
 
     @Override

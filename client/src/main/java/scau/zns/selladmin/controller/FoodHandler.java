@@ -79,10 +79,17 @@ public class FoodHandler {
     @ResponseBody
     public BasePageResponse<FoodVO> foodList(Food food, BasePageRequest request){
         Map<String, Object> map = new HashMap<>();
+        map.put("cId",food.getcId());
         map.put("title", food.getTitle());
         map.put("page", request.getPage());
         map.put("limit", request.getLimit());
         return foodFeignClient.foodList(map);
+    }
+
+    @GetMapping("/queryFood")
+    @ResponseBody
+    public BaseResponse queryFood(Integer id){
+        return foodFeignClient.queryFood(id);
     }
 
     @GetMapping("/getCateList")

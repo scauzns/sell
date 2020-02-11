@@ -103,9 +103,9 @@ public class UserController {
         return userService.delAddress(addressId);
     }
 
-    @GetMapping("/addressList/{addressId}")
-    public BasePageResponse<UserAddress> addressList(@PathVariable("addressId") String addressId){
-        return userService.addressList(addressId);
+    @GetMapping("/addressList/{userId}")
+    public BasePageResponse<UserAddress> addressList(@PathVariable("userId") String userId){
+        return userService.addressList(userId);
     }
 
     @PostMapping("/newComment")
