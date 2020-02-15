@@ -29,4 +29,12 @@ public interface URIs {
     String USER_ADDRESS_LIST = "/user/addressList";
     String USER_COMMENT = "/user/newComment";
     String USER_COMMENT_REPLY = "/user/replyComment";
+
+    //订单服务URI
+    String ORDER_SERVER = "http://localhost:8063";
+    String ORDER_COMMIT = "/order/commitOrder";
+    String ORDER_PAY = "/order/payOrder";
+    String ORDER_UPDATE_STATUS = "/order/updateOrderStatus";
+    String ORDER_QUERY = "/order/queryOrder";
+    String ORDER_LIST = "/order/orderList";
 }
