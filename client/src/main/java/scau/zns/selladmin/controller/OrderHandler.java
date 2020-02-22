@@ -4,12 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import scau.zns.common.base.BasePageRequest;
-import scau.zns.common.base.BasePageResponse;
 import scau.zns.common.base.BaseResponse;
 import scau.zns.selladmin.feign.OrderFeignClient;
+import scau.zns.selladmin.vo.OrderPageResponse;
 import scau.zns.selladmin.vo.OrderVO;
 import scau.zns.selladmin.vo.Orders;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class OrderHandler {
 
     @GetMapping("/payOrder")
     @ResponseBody
-    public BaseResponse payOrder(String orderId, Long payMoney){
+    public BaseResponse payOrder(String orderId, BigDecimal payMoney){
         return orderFeignClient.payOrder(orderId, payMoney);
     }
 
@@ -46,9 +47,10 @@ public class OrderHandler {
 
     @GetMapping("/orderList")
     @ResponseBody
-    public BasePageResponse<OrderVO> getOrderList(Orders order, BasePageRequest request){
+    public OrderPageResponse<OrderVO> getOrderList(Orders order, BasePageRequest request){
         Map<String, Object> map = new HashMap<>();
-        map.put("orderId",order.getOrderId());
+        map.put("userId",order.getUserId());
+        map.put("status",order.getStatus());
         map.put("page", request.getPage());
         map.put("limit", request.getLimit());
         return orderFeignClient.getOrderList(map);

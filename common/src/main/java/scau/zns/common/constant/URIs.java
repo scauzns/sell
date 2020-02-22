@@ -1,4 +1,4 @@
-package scau.zns.selladmin.constant;
+package scau.zns.common.constant;
 
 public interface URIs {
     // 商品服务URI
@@ -13,6 +13,7 @@ public interface URIs {
     String UPDATE_CATEGORY = "/foodCategory/update";
     String UPDATE_FOOD = "/food/update";
     String UPLOAD_FOOD_IMG = "/food/upload/img";
+    String FOOD_COMMENT = "/food/newComment";
 
     //用户服务URI
     String USER_SERVER = "http://localhost:8062";
@@ -27,8 +28,7 @@ public interface URIs {
     String USER_EDITADDRESS = "/user/editAddress";
     String USER_DELADDRESS = "/user/delAddress";
     String USER_ADDRESS_LIST = "/user/addressList";
-    String USER_COMMENT = "/user/newComment";
-    String USER_COMMENT_REPLY = "/user/replyComment";
+
 
     //订单服务URI
     String ORDER_SERVER = "http://localhost:8063";

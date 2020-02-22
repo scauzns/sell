@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Orders {
@@ -18,19 +19,19 @@ public class Orders {
      * 运费
      */
     @Column(name = "send_cost")
-    private Long sendCost;
+    private BigDecimal sendCost;
 
     /**
      * 订单金额
      */
     @Column(name = "total_amount")
-    private Long totalAmount;
+    private BigDecimal totalAmount;
 
     /**
      * 实付金额
      */
     @Column(name = "pay_money")
-    private Long payMoney;
+    private BigDecimal payMoney;
 
     /**
      * 收货人
@@ -93,7 +94,7 @@ public class Orders {
      *
      * @return send_cost - 运费
      */
-    public Long getSendCost() {
+    public BigDecimal getSendCost() {
         return sendCost;
     }
 
@@ -102,15 +103,15 @@ public class Orders {
      *
      * @param sendCost 运费
      */
-    public void setSendCost(Long sendCost) {
+    public void setSendCost(BigDecimal sendCost) {
         this.sendCost = sendCost;
     }
 
-    public Long getTotalAmount() {
+    public BigDecimal getTotalAmount() {
         return totalAmount;
     }
 
-    public void setTotalAmount(Long totalAmount) {
+    public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
 
@@ -119,7 +120,7 @@ public class Orders {
      *
      * @return pay_money - 实付金额
      */
-    public Long getPayMoney() {
+    public BigDecimal getPayMoney() {
         return payMoney;
     }
 
@@ -128,7 +129,7 @@ public class Orders {
      *
      * @param payMoney 实付金额
      */
-    public void setPayMoney(Long payMoney) {
+    public void setPayMoney(BigDecimal payMoney) {
         this.payMoney = payMoney;
     }
 

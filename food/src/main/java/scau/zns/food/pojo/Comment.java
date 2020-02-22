@@ -1,4 +1,4 @@
-package scau.zns.user.pojo;
+package scau.zns.food.pojo;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -13,6 +13,9 @@ public class Comment {
     @Column(name = "user_id")
     private String userId;
 
+    @Column(name = "user_cover")
+    private String userCover;
+
     @Column(name = "food_id")
     private Integer foodId;
 
@@ -21,12 +24,7 @@ public class Comment {
 
     private String content;
 
-    //店家回复
-    private String reply;
-
-    @Column(name = "reply_time")
-    private Date replyTime;
-
+    private Integer star;
 
     /**
      * 0 有效  1无效
@@ -65,6 +63,22 @@ public class Comment {
      */
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUserCover() {
+        return userCover;
+    }
+
+    public void setUserCover(String userCover) {
+        this.userCover = userCover;
+    }
+
+    public Integer getStar() {
+        return star;
+    }
+
+    public void setStar(Integer star) {
+        this.star = star;
     }
 
     /**
@@ -107,22 +121,6 @@ public class Comment {
      */
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public String getReply() {
-        return reply;
-    }
-
-    public void setReply(String reply) {
-        this.reply = reply;
-    }
-
-    public Date getReplyTime() {
-        return replyTime;
-    }
-
-    public void setReplyTime(Date replyTime) {
-        this.replyTime = replyTime;
     }
 
     /**

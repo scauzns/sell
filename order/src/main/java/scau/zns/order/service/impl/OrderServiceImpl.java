@@ -18,9 +18,11 @@ import scau.zns.order.mapper.OrderMapper;
 import scau.zns.order.pojo.Orders;
 import scau.zns.order.pojo.OrderDetail;
 import scau.zns.order.service.OrderService;
+import scau.zns.order.vo.OrderPageResponse;
 import scau.zns.order.vo.OrderVO;
 import tk.mybatis.mapper.entity.Example;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +65,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public BaseResponse payOrder(String orderId, Long payMoney) {
+    public BaseResponse payOrder(String orderId, BigDecimal payMoney) {
         Orders order = new Orders();
         order.setOrderId(orderId);
         order.setPayMoney(payMoney);
@@ -76,16 +78,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public BasePageResponse<OrderVO> orderList(Orders order, BasePageRequest request) {
+    public OrderPageResponse<OrderVO> orderList(Orders order, BasePageRequest request) {
         Example example = new Example(Orders.class);
         Example.Criteria criteria = example.createCriteria();
         if(order != null && Strings.isNotBlank(order.getUserId())){
             criteria.andEqualTo("userId", order.getUserId());
         }
+        if(order != null && order.getStatus() != null){
+            criteria.andEqualTo("status", order.getStatus());
+        }
         example.setOrderByClause("update_time desc");
         PageHelper.startPage(request.getPage(), request.getLimit());
         Page<Orders> orders = (Page<Orders>)orderMapper.selectByExample(example);
-        return new BasePageResponse<>(convert(orders), orders.getTotal());
+        return new OrderPageResponse<>(convert(orders), orders.getTotal(), orders.getPages());
     }
 
     @Override

@@ -9,6 +9,8 @@ import scau.zns.order.pojo.Orders;
 import scau.zns.order.service.OrderService;
 import scau.zns.order.vo.OrderVO;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -23,7 +25,7 @@ public class OrderController {
 
 
     @GetMapping("/payOrder")
-    public BaseResponse payOrder(String orderId, Long payMoney){
+    public BaseResponse payOrder(String orderId, BigDecimal payMoney){
         return orderService.payOrder(orderId, payMoney);
     }
 

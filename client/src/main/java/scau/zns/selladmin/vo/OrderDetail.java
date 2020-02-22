@@ -1,6 +1,8 @@
 package scau.zns.selladmin.vo;
 
 
+import java.math.BigDecimal;
+
 public class OrderDetail {
     private String id;
 
@@ -18,7 +20,7 @@ public class OrderDetail {
     /**
      * 售价
      */
-    private Long sellPrice;
+    private BigDecimal sellPrice;
 
     /**
      * 商品数量
@@ -104,7 +106,7 @@ public class OrderDetail {
      *
      * @return sell_price - 售价
      */
-    public Long getSellPrice() {
+    public BigDecimal getSellPrice() {
         return sellPrice;
     }
 
@@ -113,7 +115,7 @@ public class OrderDetail {
      *
      * @param sellPrice 售价
      */
-    public void setSellPrice(Long sellPrice) {
+    public void setSellPrice(BigDecimal sellPrice) {
         this.sellPrice = sellPrice;
     }
 

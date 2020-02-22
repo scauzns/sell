@@ -9,12 +9,14 @@ import scau.zns.common.base.BaseResponse;
 import scau.zns.common.constant.FileConstant;
 import scau.zns.common.constant.ResponseCode;
 import scau.zns.food.exception.FoodBusinessException;
+import scau.zns.food.pojo.Comment;
 import scau.zns.food.pojo.Food;
 import scau.zns.food.service.FoodService;
 import scau.zns.food.vo.FoodVO;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/food")
@@ -78,5 +80,11 @@ public class FoodController {
             return new BaseResponse(ResponseCode.FAILED,"图片不能为空！");
         }
         return new BaseResponse(FileConstant.VIRTUAL_PATH + file.getOriginalFilename());
+    }
+
+
+    @PostMapping("/newComment")
+    public BaseResponse newComment(@RequestBody List<Comment> comments){
+        return foodService.addComment(comments);
     }
 }

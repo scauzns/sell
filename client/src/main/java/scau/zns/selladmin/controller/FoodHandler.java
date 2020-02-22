@@ -8,8 +8,8 @@ import org.springframework.web.servlet.ModelAndView;
 import scau.zns.common.base.BasePageRequest;
 import scau.zns.common.base.BasePageResponse;
 import scau.zns.common.base.BaseResponse;
-import scau.zns.selladmin.constant.URIs;
 import scau.zns.selladmin.feign.FoodFeignClient;
+import scau.zns.selladmin.vo.Comment;
 import scau.zns.selladmin.vo.Food;
 import scau.zns.selladmin.vo.FoodCategory;
 import scau.zns.selladmin.vo.FoodVO;
@@ -138,5 +138,11 @@ public class FoodHandler {
     @ResponseBody
     public BaseResponse updateCate(@RequestBody FoodCategory category){
         return foodFeignClient.updateCate(category);
+    }
+
+    @PostMapping("/addComment")
+    @ResponseBody
+    public BaseResponse addComment(@RequestBody List<Comment> comments){
+        return foodFeignClient.newComment(comments);
     }
 }

@@ -13,14 +13,11 @@ import scau.zns.common.base.BasePageRequest;
 import scau.zns.common.base.BasePageResponse;
 import scau.zns.common.base.BaseResponse;
 import scau.zns.common.constant.ResponseCode;
-import scau.zns.common.constant.StatusCode;
 import scau.zns.common.constant.UserStatus;
 import scau.zns.common.utils.idworker.Sid;
-import scau.zns.user.mapper.CommentMapper;
 import scau.zns.user.mapper.UserAddressMapper;
 import scau.zns.user.mapper.UserMapper;
 import scau.zns.user.mapper.UserSearchMapper;
-import scau.zns.user.pojo.Comment;
 import scau.zns.user.pojo.User;
 import scau.zns.user.pojo.UserAddress;
 import scau.zns.user.pojo.UserSearch;
@@ -42,9 +39,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserSearchMapper userSearchMapper;
-
-    @Autowired
-    private CommentMapper commentMapper;
 
     @Autowired
     private Sid sid;
@@ -170,18 +164,5 @@ public class UserServiceImpl implements UserService {
         return BaseResponse.success();
     }
 
-    @Override
-    @Transactional
-    public BaseResponse addComment(Comment comment) {
-        commentMapper.insertSelective(comment);
-        return BaseResponse.success();
-    }
 
-    @Override
-    @Transactional
-    public BaseResponse replyComment(Comment comment) {
-        comment.setReplyTime(new Date());
-        commentMapper.updateByPrimaryKeySelective(comment);
-        return BaseResponse.success();
-    }
 }

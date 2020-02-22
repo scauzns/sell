@@ -3,12 +3,10 @@ package scau.zns.user.service;
 import scau.zns.common.base.BasePageRequest;
 import scau.zns.common.base.BasePageResponse;
 import scau.zns.common.base.BaseResponse;
-import scau.zns.user.pojo.Comment;
 import scau.zns.user.pojo.User;
 import scau.zns.user.pojo.UserAddress;
 import scau.zns.user.pojo.UserSearch;
 import scau.zns.user.vo.UserLogInRequest;
-import scau.zns.user.vo.UserVO;
 
 public interface UserService {
     //注册
@@ -31,8 +29,5 @@ public interface UserService {
     BaseResponse delAddress(String addressId);
     //修改收获地址
     BaseResponse editAddress(UserAddress userAddress);
-    //新增评价
-    BaseResponse addComment(Comment comment);
-    //店家回复
-    BaseResponse replyComment(Comment comment);
+
 }

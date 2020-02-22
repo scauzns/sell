@@ -1,34 +1,25 @@
-package scau.zns.order.pojo;
+package scau.zns.food.vo;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
 import java.math.BigDecimal;
 
-@Table(name = "order_detail")
 public class OrderDetail {
-    @Id
     private String id;
 
-    @Column(name = "order_id")
     private String orderId;
 
-    @Column(name = "food_id")
     private Integer foodId;
 
-    @Column(name = "food_title")
     private String foodTitle;
 
     /**
      * 封面
      */
-    @Column(name = "food_cover")
     private String foodCover;
 
     /**
      * 售价
      */
-    @Column(name = "sell_price")
     private BigDecimal sellPrice;
 
     /**

@@ -8,12 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import scau.zns.common.base.BasePageRequest;
 import scau.zns.common.base.BasePageResponse;
 import scau.zns.common.base.BaseResponse;
+import scau.zns.common.constant.OrderStatus;
 import scau.zns.food.exception.FoodBusinessException;
+import scau.zns.food.feign.OrderFeignClient;
+import scau.zns.food.mapper.CommentMapper;
 import scau.zns.food.mapper.FoodCategoryMapper;
 import scau.zns.food.mapper.FoodMapper;
+import scau.zns.food.pojo.Comment;
 import scau.zns.food.pojo.Food;
 import scau.zns.food.pojo.FoodCategory;
 import scau.zns.food.service.FoodService;
@@ -35,6 +40,12 @@ public class FoodServiceImpl implements FoodService {
 
     @Autowired
     private FoodCategoryMapper foodCategoryMapper;
+
+    @Autowired
+    private CommentMapper commentMapper;
+
+    @Autowired
+    private OrderFeignClient orderFeignClient;
 
     @Override
     public BaseResponse query(int id) {
@@ -68,14 +79,40 @@ public class FoodServiceImpl implements FoodService {
     public List<FoodVO> convert(List<Food> foods){
         List<FoodVO> vos = new ArrayList<>();
         Map<Integer, String> categoryMap = getCategoryMap();
-        //todo 查询月销量、统计好评率等
+        //todo 查询月销量等
         for(Food food : foods){
             FoodVO vo = new FoodVO();
             BeanUtils.copyProperties(food,vo);
             vo.setcName(categoryMap.get(food.getcId()));
+            List<Comment> foodComments = getFoodComments(food.getId());
+            double praiseRate = calPraiseRate(foodComments);
+            vo.setComments(foodComments);
+            vo.setPraiseRate(praiseRate);
             vos.add(vo);
         }
         return vos;
+    }
+
+    public List<Comment> getFoodComments(Integer foodId){
+        Example example = new Example(Comment.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("foodId", foodId);
+        return commentMapper.selectByExample(example);
+    }
+
+    public double calPraiseRate(List<Comment> foodComments){
+        if(CollectionUtils.isEmpty(foodComments)){
+            return 0;
+        }
+        double totalComments = foodComments.size();
+        double goodComments = 0;
+        for(Comment comment : foodComments){
+            if(comment.getStar() >= 3){
+                goodComments++;
+            }
+        }
+        double praiseRate = goodComments/totalComments;
+        return Double.parseDouble(String.format("%.2f", praiseRate));
     }
 
     @Override
@@ -104,6 +141,25 @@ public class FoodServiceImpl implements FoodService {
         int rows = foodMapper.updateByPrimaryKeySelective(food);
         if(rows == 0){
             return BaseResponse.failed();
+        }
+        return BaseResponse.success();
+    }
+
+    @Override
+    @Transactional
+    public BaseResponse addComment(List<Comment> comments) {
+        if(CollectionUtils.isEmpty(comments)){
+            throw new FoodBusinessException("评论列表不能为空！！");
+        }
+        for(Comment comment : comments){
+            int rows = commentMapper.insertSelective(comment);
+            if(rows == 0){
+                throw new FoodBusinessException("新增评价未知异常！！");
+            }
+        }
+        BaseResponse orderStatusResponse = orderFeignClient.updateOrderStatus(comments.get(0).getOrderId(), OrderStatus.FINISHED);
+        if(orderStatusResponse.getCode() != 0){
+            throw new FoodBusinessException("更新订单状态失败！！");
         }
         return BaseResponse.success();
     }

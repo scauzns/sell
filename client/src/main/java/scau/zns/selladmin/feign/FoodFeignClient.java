@@ -8,11 +8,13 @@ import scau.zns.common.base.BasePageRequest;
 import scau.zns.common.base.BasePageResponse;
 import scau.zns.common.base.BaseResponse;
 import scau.zns.selladmin.config.MultipartSupportConfig;
-import scau.zns.selladmin.constant.URIs;
+import scau.zns.common.constant.URIs;
+import scau.zns.selladmin.vo.Comment;
 import scau.zns.selladmin.vo.Food;
 import scau.zns.selladmin.vo.FoodCategory;
 import scau.zns.selladmin.vo.FoodVO;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -51,4 +53,6 @@ public interface FoodFeignClient {
     @PostMapping(value = URIs.UPLOAD_FOOD_IMG, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     BaseResponse uploadImg(@RequestPart("file") MultipartFile file);
 
+    @PostMapping(URIs.FOOD_COMMENT)
+    BaseResponse newComment(@RequestBody List<Comment> comments);
 }

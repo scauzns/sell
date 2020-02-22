@@ -9,7 +9,6 @@ import scau.zns.common.base.BaseResponse;
 import scau.zns.common.constant.FileConstant;
 import scau.zns.common.constant.ResponseCode;
 import scau.zns.common.utils.idworker.Sid;
-import scau.zns.user.pojo.Comment;
 import scau.zns.user.pojo.User;
 import scau.zns.user.pojo.UserAddress;
 import scau.zns.user.pojo.UserSearch;
@@ -108,13 +107,5 @@ public class UserController {
         return userService.addressList(userId);
     }
 
-    @PostMapping("/newComment")
-    public BaseResponse newComment(@RequestBody Comment comment){
-        return userService.addComment(comment);
-    }
 
-    @PostMapping("/replyComment")
-    public BaseResponse replyComment(@RequestBody Comment comment){
-        return userService.replyComment(comment);
-    }
 }

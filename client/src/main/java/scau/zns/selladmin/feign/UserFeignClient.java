@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import scau.zns.common.base.BasePageResponse;
 import scau.zns.common.base.BaseResponse;
 import scau.zns.selladmin.config.MultipartSupportConfig;
-import scau.zns.selladmin.constant.URIs;
+import scau.zns.common.constant.URIs;
 import scau.zns.selladmin.vo.User;
 import scau.zns.selladmin.vo.UserAddress;
 import scau.zns.selladmin.vo.UserLogInRequest;

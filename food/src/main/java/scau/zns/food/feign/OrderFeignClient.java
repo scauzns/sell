@@ -1,4 +1,4 @@
-package scau.zns.selladmin.feign;
+package scau.zns.food.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import scau.zns.common.base.BaseResponse;
 import scau.zns.common.constant.URIs;
-import scau.zns.selladmin.vo.OrderPageResponse;
-import scau.zns.selladmin.vo.OrderVO;
+import scau.zns.food.vo.OrderPageResponse;
+import scau.zns.food.vo.OrderVO;
 
 import java.math.BigDecimal;
 import java.util.Map;
