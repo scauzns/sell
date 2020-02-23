@@ -53,6 +53,10 @@ public class Orders {
      */
     private Integer status;
 
+    @Column(name = "expire_time")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private Date expireTime;
+
     @Column(name = "create_time")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
@@ -203,6 +207,14 @@ public class Orders {
      */
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Date getExpireTime() {
+        return expireTime;
+    }
+
+    public void setExpireTime(Date expireTime) {
+        this.expireTime = expireTime;
     }
 
     /**

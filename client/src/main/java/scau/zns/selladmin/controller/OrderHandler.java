@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import scau.zns.common.base.BasePageRequest;
 import scau.zns.common.base.BaseResponse;
 import scau.zns.selladmin.feign.OrderFeignClient;
+import scau.zns.selladmin.vo.OrderPageRequest;
 import scau.zns.selladmin.vo.OrderPageResponse;
 import scau.zns.selladmin.vo.OrderVO;
 import scau.zns.selladmin.vo.Orders;
@@ -47,10 +48,13 @@ public class OrderHandler {
 
     @GetMapping("/orderList")
     @ResponseBody
-    public OrderPageResponse<OrderVO> getOrderList(Orders order, BasePageRequest request){
+    public OrderPageResponse<OrderVO> getOrderList(OrderPageRequest request){
         Map<String, Object> map = new HashMap<>();
-        map.put("userId",order.getUserId());
-        map.put("status",order.getStatus());
+        map.put("userId",request.getUserId());
+        map.put("status",request.getStatus());
+        map.put("expireTime",request.getExpireTime());
+        map.put("beginTime",request.getBeginTime());
+        map.put("endTime",request.getEndTime());
         map.put("page", request.getPage());
         map.put("limit", request.getLimit());
         return orderFeignClient.getOrderList(map);

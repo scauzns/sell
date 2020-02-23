@@ -1,11 +1,15 @@
 package scau.zns.selladmin.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class Comment {
     private Integer id;
 
     private String userId;
+
+    private String userName;
 
     private String userCover;
 
@@ -22,8 +26,10 @@ public class Comment {
      */
     private Byte status;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date updateTime;
 
     /**
@@ -38,6 +44,14 @@ public class Comment {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     /**

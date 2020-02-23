@@ -3,6 +3,7 @@ package scau.zns.order.service;
 import scau.zns.common.base.BasePageRequest;
 import scau.zns.common.base.BaseResponse;
 import scau.zns.order.pojo.Orders;
+import scau.zns.order.vo.OrderPageRequest;
 import scau.zns.order.vo.OrderPageResponse;
 import scau.zns.order.vo.OrderVO;
 
@@ -16,7 +17,7 @@ public interface OrderService {
     BaseResponse payOrder(String orderId, BigDecimal payMoney);
 
     //订单列表
-    OrderPageResponse<OrderVO> orderList(Orders order, BasePageRequest request);
+    OrderPageResponse<OrderVO> orderList(OrderPageRequest request);
 
     //查询订单
     BaseResponse queryOrder(String orderId);

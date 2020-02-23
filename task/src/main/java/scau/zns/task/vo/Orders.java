@@ -1,7 +1,6 @@
-package scau.zns.selladmin.vo;
+package scau.zns.task.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -233,5 +232,23 @@ public class Orders {
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Orders{" +
+                "orderId='" + orderId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", sendCost=" + sendCost +
+                ", totalAmount=" + totalAmount +
+                ", payMoney=" + payMoney +
+                ", receiver='" + receiver + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", address='" + address + '\'' +
+                ", status=" + status +
+                ", expireTime=" + expireTime +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
     }
 }

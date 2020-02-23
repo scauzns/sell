@@ -18,12 +18,16 @@ import scau.zns.order.mapper.OrderMapper;
 import scau.zns.order.pojo.Orders;
 import scau.zns.order.pojo.OrderDetail;
 import scau.zns.order.service.OrderService;
+import scau.zns.order.vo.OrderPageRequest;
 import scau.zns.order.vo.OrderPageResponse;
 import scau.zns.order.vo.OrderVO;
 import tk.mybatis.mapper.entity.Example;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -46,6 +50,10 @@ public class OrderServiceImpl implements OrderService {
         Orders order = new Orders();
         BeanUtils.copyProperties(orderVO, order);
         order.setStatus(OrderStatus.UNPAID);
+        //设置订单过期时间
+        Calendar now = Calendar.getInstance();
+        now.add(Calendar.MINUTE, 3);
+        order.setExpireTime(now.getTime());
         List<OrderDetail> orderDetails = orderVO.getOrderDetails();
         if(orderDetails == null || orderDetails.size()==0){
             return new BaseResponse(ResponseCode.FAILED, "订单商品不能为空！");
@@ -78,14 +86,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderPageResponse<OrderVO> orderList(Orders order, BasePageRequest request) {
+    public OrderPageResponse<OrderVO> orderList(OrderPageRequest request) {
         Example example = new Example(Orders.class);
         Example.Criteria criteria = example.createCriteria();
-        if(order != null && Strings.isNotBlank(order.getUserId())){
-            criteria.andEqualTo("userId", order.getUserId());
+        if(request != null && Strings.isNotBlank(request.getUserId())){
+            criteria.andEqualTo("userId", request.getUserId());
         }
-        if(order != null && order.getStatus() != null){
-            criteria.andEqualTo("status", order.getStatus());
+        if(request != null && request.getStatus() != null){
+            criteria.andEqualTo("status", request.getStatus());
+        }
+        if(request != null && Strings.isNotBlank(request.getExpireTime())){
+            criteria.andLessThan("expireTime", request.getExpireTime());
+        }
+        if(request != null && Strings.isNotBlank(request.getBeginTime())){
+            criteria.andGreaterThanOrEqualTo("createTime", request.getBeginTime());
+        }
+        if(request != null && Strings.isNotBlank(request.getEndTime())){
+            criteria.andLessThanOrEqualTo("createTime", request.getEndTime());
         }
         example.setOrderByClause("update_time desc");
         PageHelper.startPage(request.getPage(), request.getLimit());

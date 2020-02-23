@@ -7,6 +7,7 @@ import scau.zns.common.base.BasePageResponse;
 import scau.zns.common.base.BaseResponse;
 import scau.zns.order.pojo.Orders;
 import scau.zns.order.service.OrderService;
+import scau.zns.order.vo.OrderPageRequest;
 import scau.zns.order.vo.OrderVO;
 
 import java.math.BigDecimal;
@@ -40,7 +41,7 @@ public class OrderController {
     }
 
     @GetMapping("/orderList")
-    public BasePageResponse<OrderVO> getOrderList(Orders order, BasePageRequest request){
-        return orderService.orderList(order, request);
+    public BasePageResponse<OrderVO> getOrderList(OrderPageRequest request){
+        return orderService.orderList(request);
     }
 }

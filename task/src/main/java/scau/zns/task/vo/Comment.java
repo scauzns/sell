@@ -1,30 +1,20 @@
-package scau.zns.food.pojo;
+package scau.zns.task.vo;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import java.util.Date;
 
 public class Comment {
-    @Id
-    @GeneratedValue(generator = "JDBC") //返回自增主键
     private Integer id;
 
-    @Column(name = "user_id")
     private String userId;
 
-    @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "user_cover")
     private String userCover;
 
-    @Column(name = "food_id")
     private Integer foodId;
 
-    @Column(name = "order_id")
     private String orderId;
 
     private String content;
@@ -36,11 +26,9 @@ public class Comment {
      */
     private Byte status;
 
-    @Column(name = "create_time")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
-    @Column(name = "update_time")
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date updateTime;
 
@@ -58,6 +46,14 @@ public class Comment {
         this.id = id;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     /**
      * @return user_id
      */
@@ -70,14 +66,6 @@ public class Comment {
      */
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     public String getUserCover() {
