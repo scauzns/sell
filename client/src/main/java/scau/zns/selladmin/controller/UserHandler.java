@@ -10,8 +10,11 @@ import scau.zns.selladmin.feign.UserFeignClient;
 import scau.zns.selladmin.vo.User;
 import scau.zns.selladmin.vo.UserAddress;
 import scau.zns.selladmin.vo.UserLogInRequest;
+import scau.zns.selladmin.vo.UserSearch;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/userService")
@@ -53,5 +56,19 @@ public class UserHandler {
     @ResponseBody
     public BaseResponse delAddress(String addressId){
         return userFeignClient.delAddress(addressId);
+    }
+
+    @GetMapping("/hotSearch")
+    @ResponseBody
+    public BaseResponse getHotSearch(){
+        return userFeignClient.getHotSearch();
+    }
+
+    @GetMapping("/userSearch")
+    @ResponseBody
+    public BaseResponse userSearch(UserSearch userSearch){
+        Map<String, Object> map = new HashMap<>();
+        map.put("content", userSearch.getContent());
+        return userFeignClient.userSearch(map);
     }
 }

@@ -164,5 +164,11 @@ public class UserServiceImpl implements UserService {
         return BaseResponse.success();
     }
 
+    @Override
+    public BaseResponse getHotSearch() {
+        List<String> hotSearch = userSearchMapper.getHotSearch();
+        return new BaseResponse(hotSearch);
+    }
+
 
 }

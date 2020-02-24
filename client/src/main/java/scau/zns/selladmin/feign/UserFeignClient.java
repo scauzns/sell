@@ -28,7 +28,7 @@ public interface UserFeignClient {
     BaseResponse userFrozen(@PathVariable("userId")String userId);
 
     @GetMapping(URIs.USER_SEARCH)
-    BaseResponse userSearch(UserSearch userSearch);
+    BaseResponse userSearch(@RequestParam Map<String, Object> map);
 
     @GetMapping(URIs.USER_LIST)
     BasePageResponse<User> userList(@RequestParam Map<String, Object> map);
@@ -44,4 +44,7 @@ public interface UserFeignClient {
 
     @GetMapping(value = URIs.USER_DELADDRESS + "/{addressId}")
     BaseResponse delAddress(@PathVariable("addressId") String addressId);
+
+    @GetMapping(URIs.USER_HOTSEARCH)
+    BaseResponse getHotSearch();
 }

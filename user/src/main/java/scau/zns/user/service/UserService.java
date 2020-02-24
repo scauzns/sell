@@ -29,5 +29,6 @@ public interface UserService {
     BaseResponse delAddress(String addressId);
     //修改收获地址
     BaseResponse editAddress(UserAddress userAddress);
-
+    //热搜
+    BaseResponse getHotSearch();
 }

@@ -53,6 +53,11 @@ public class UserController {
         return userService.userSearch(userSearch);
     }
 
+    @GetMapping("/hotSearch")
+    public BaseResponse getHotSearch(){
+        return userService.getHotSearch();
+    }
+
     @GetMapping("/list")
     public BasePageResponse<User> userList(User user, BasePageRequest request){
         return userService.userList(user, request);

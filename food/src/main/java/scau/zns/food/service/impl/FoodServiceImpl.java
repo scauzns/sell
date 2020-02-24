@@ -1,5 +1,6 @@
 package scau.zns.food.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.logging.log4j.util.Strings;
@@ -18,18 +19,18 @@ import scau.zns.food.feign.OrderFeignClient;
 import scau.zns.food.mapper.CommentMapper;
 import scau.zns.food.mapper.FoodCategoryMapper;
 import scau.zns.food.mapper.FoodMapper;
+import scau.zns.food.mapper.SalesStatisticsMapper;
 import scau.zns.food.pojo.Comment;
 import scau.zns.food.pojo.Food;
 import scau.zns.food.pojo.FoodCategory;
+import scau.zns.food.pojo.SalesStatistics;
 import scau.zns.food.service.FoodService;
 import scau.zns.food.vo.FoodVO;
 import tk.mybatis.mapper.entity.Example;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +47,9 @@ public class FoodServiceImpl implements FoodService {
 
     @Autowired
     private OrderFeignClient orderFeignClient;
+
+    @Autowired
+    private SalesStatisticsMapper salesStatisticsMapper;
 
     @Override
     public BaseResponse query(int id) {
@@ -79,7 +83,6 @@ public class FoodServiceImpl implements FoodService {
     public List<FoodVO> convert(List<Food> foods){
         List<FoodVO> vos = new ArrayList<>();
         Map<Integer, String> categoryMap = getCategoryMap();
-        //todo 查询月销量等
         for(Food food : foods){
             FoodVO vo = new FoodVO();
             BeanUtils.copyProperties(food,vo);
@@ -88,6 +91,7 @@ public class FoodServiceImpl implements FoodService {
             double praiseRate = calPraiseRate(foodComments);
             vo.setComments(foodComments);
             vo.setPraiseRate(praiseRate);
+            vo.setSales(getFoodMonthSales(food.getId()));
             vos.add(vo);
         }
         return vos;
@@ -98,6 +102,24 @@ public class FoodServiceImpl implements FoodService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("foodId", foodId);
         return commentMapper.selectByExample(example);
+    }
+
+    public Integer getFoodMonthSales(Integer foodId){
+        Example example = new Example(SalesStatistics.class);
+        example.createCriteria().andEqualTo("type", 2).andEqualTo("targetId", foodId);
+        SalesStatistics salesStatistics = salesStatisticsMapper.selectOneByExample(example);
+        if(salesStatistics == null){
+            return 0;
+        }
+        JSONObject sale = JSONObject.parseObject(salesStatistics.getSales());
+        String currentMonth = getCurrentMonth();
+        return (Integer)sale.getOrDefault(currentMonth, 0);
+    }
+
+    private String getCurrentMonth(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        Date now = new Date();
+        return sdf.format(now);
     }
 
     public double calPraiseRate(List<Comment> foodComments){

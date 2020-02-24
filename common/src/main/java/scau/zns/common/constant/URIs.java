@@ -28,7 +28,7 @@ public interface URIs {
     String USER_EDITADDRESS = "/user/editAddress";
     String USER_DELADDRESS = "/user/delAddress";
     String USER_ADDRESS_LIST = "/user/addressList";
-
+    String USER_HOTSEARCH = "/user/hotSearch";
 
     //订单服务URI
     String ORDER_SERVER = "http://localhost:8063";
