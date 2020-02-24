@@ -11,7 +11,7 @@ public class SalesStatistics {
     private Integer id;
 
     /**
-     * 商品id 或者 订单id
+     * 商品id 或者 订单记录id
      */
     @Column(name = "target_id")
     private String targetId;
@@ -26,7 +26,7 @@ public class SalesStatistics {
      */
     private String sales;
 
-    private Integer total;
+    private Double total;
 
     @Column(name = "create_time")
     private Date createTime;
@@ -105,14 +105,14 @@ public class SalesStatistics {
     /**
      * @return total
      */
-    public Integer getTotal() {
+    public Double getTotal() {
         return total;
     }
 
     /**
      * @param total
      */
-    public void setTotal(Integer total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 

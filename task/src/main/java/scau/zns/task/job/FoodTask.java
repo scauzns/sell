@@ -5,12 +5,14 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import scau.zns.common.base.BasePageResponse;
 import scau.zns.common.constant.OrderStatus;
+import scau.zns.common.utils.idworker.Sid;
 import scau.zns.task.feign.FoodFeignClient;
 import scau.zns.task.feign.OrderFeignClient;
 import scau.zns.task.mapper.SalesStatisticsMapper;
@@ -18,6 +20,7 @@ import scau.zns.task.pojo.SalesStatistics;
 import scau.zns.task.vo.*;
 import tk.mybatis.mapper.entity.Example;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -35,6 +38,9 @@ public class FoodTask {
 
     @Autowired
     private FoodFeignClient foodFeignClient;
+
+    @Autowired
+    private Sid sid;
 
 //    @Scheduled(cron = "0 */1 * * * ?")
     public void test(){
@@ -85,10 +91,10 @@ public class FoodTask {
                 monthSalesStatistics.setType(2);
                 daySalesStatistics.setSales("{}");
                 daySalesStatistics.setTargetId(food.getId() + "");
-                daySalesStatistics.setTotal(0);
+                daySalesStatistics.setTotal(0.0);
                 monthSalesStatistics.setSales("{}");
                 monthSalesStatistics.setTargetId(food.getId() + "");
-                monthSalesStatistics.setTotal(0);
+                monthSalesStatistics.setTotal(0.0);
                 newStat = true;
             }else{
                 daySalesStatistics = salesStatistics.get(0);
@@ -99,14 +105,15 @@ public class FoodTask {
             String currentDate = getCurrentDate();
             daySalesObject.put(currentDate, daySalesNum);
             daySalesStatistics.setSales(JSONObject.toJSONString(daySalesObject));
-            int daySalesTotal = 0;
+            double daySalesTotal = 0;
             for(Object num : daySalesObject.values()){
-                daySalesTotal += (Integer)num;
+                daySalesTotal += (Integer) num;
             }
             daySalesStatistics.setTotal(daySalesTotal);
             if(newStat){
                 salesStatisticsMapper.insertSelective(daySalesStatistics);
             }else{
+                daySalesStatistics.setUpdateTime(new Date());
                 salesStatisticsMapper.updateByPrimaryKeySelective(daySalesStatistics);
             }
             // 2、按月统计
@@ -124,14 +131,15 @@ public class FoodTask {
             monthSalesObject.put(currentMonth, monthSalesNum);
             monthSalesStatistics.setSales(JSONObject.toJSONString(monthSalesObject));
             // 统计所有月份的销量
-            int monthSalesTotal = 0;
+            double monthSalesTotal = 0;
             for(Object num : monthSalesObject.values()){
-                monthSalesTotal += (Integer)num;
+                monthSalesTotal += (Integer) num;
             }
             monthSalesStatistics.setTotal(monthSalesTotal);
             if(newStat){
                 salesStatisticsMapper.insertSelective(monthSalesStatistics);
             }else{
+                monthSalesStatistics.setUpdateTime(new Date());
                 salesStatisticsMapper.updateByPrimaryKeySelective(monthSalesStatistics);
             }
         }
@@ -140,11 +148,85 @@ public class FoodTask {
 
 
     // 统计订单成交额
+    @Scheduled(cron = "0 */8 * * * ?")
     public void orderStatistics() {
-        // 1、按天统计
+        logger.info("FoodTask orderStatistics start...");
+        List<Orders> dayOrders = getDayOrders();
+        // 当天的成交量
+        BigDecimal daySum = new BigDecimal(0);
+        for(Orders order : dayOrders){
+            daySum = daySum.add(order.getPayMoney());
+        }
+        Example example = new Example(SalesStatistics.class);
+        example.createCriteria().andIn("type",Arrays.asList(3,4));
+        example.orderBy("type");
+        List<SalesStatistics> salesStatistics = salesStatisticsMapper.selectByExample(example);
+        SalesStatistics dayStat = null;
+        SalesStatistics monthStat = null;
+        boolean newStat = false;
+        if(CollectionUtils.isEmpty(salesStatistics)){
+            newStat = true;
+            dayStat = new SalesStatistics();
+            dayStat.setType(3);
+            dayStat.setSales("{}");
+            dayStat.setTotal(0.0);
+            monthStat = new SalesStatistics();
+            monthStat.setType(4);
+            monthStat.setSales("{}");
+            monthStat.setTotal(0.0);
+        }else{
+            dayStat = salesStatistics.get(0);
+            monthStat = salesStatistics.get(1);
+        }
+        //统计某日
+        JSONObject daySalesObject = JSONObject.parseObject(dayStat.getSales());
+        String currentDate = getCurrentDate();
+        daySalesObject.put(currentDate, daySum);
+        dayStat.setSales(JSONObject.toJSONString(daySalesObject));
+        double daySalesTotal = 0;
+        for(Object num : daySalesObject.values()){
+            BigDecimal tmpNum = (BigDecimal) num;
+            daySalesTotal += tmpNum.doubleValue();
+        }
+        dayStat.setTotal(daySalesTotal);
+        if(newStat){
+            String id = sid.nextShort();
+            dayStat.setTargetId(id);
+            salesStatisticsMapper.insertSelective(dayStat);
+        }else{
+            dayStat.setUpdateTime(new Date());
+            salesStatisticsMapper.updateByPrimaryKeySelective(dayStat);
+        }
 
-        // 2、按月统计
-
+        // 统计某一个月
+        JSONObject monthSalesObject = JSONObject.parseObject(monthStat.getSales());
+        String currentMonth = getCurrentMonth();
+        double monthSalesNum = 0;
+        for(Map.Entry<String, Object> entry : daySalesObject.entrySet()){
+            String oneDay = entry.getKey();
+            BigDecimal tmpDayValue = (BigDecimal) entry.getValue();
+            double daySalesCount = tmpDayValue.doubleValue();
+            if(oneDay.startsWith(currentMonth)){
+                monthSalesNum += daySalesCount;
+            }
+        }
+        monthSalesObject.put(currentMonth, monthSalesNum);
+        monthStat.setSales(JSONObject.toJSONString(monthSalesObject));
+        // 统计所有月份的销量
+        double monthSalesTotal = 0;
+        for(Object num : monthSalesObject.values()){
+            monthSalesTotal += (Double)num;
+        }
+        monthStat.setTotal(monthSalesTotal);
+        if(newStat){
+            String id = sid.nextShort();
+            monthStat.setTargetId(id);
+            salesStatisticsMapper.insertSelective(monthStat);
+        }else{
+            monthStat.setUpdateTime(new Date());
+            salesStatisticsMapper.updateByPrimaryKeySelective(monthStat);
+        }
+        logger.info("FoodTask orderStatistics end...");
     }
 
     public Integer getSalesNum(int foodId, List<OrderDetail> dayOrderDetails){
@@ -175,21 +257,25 @@ public class FoodTask {
         });
         return dayOrderDetails;
     }
-    public List<OrderDetail> getMonthOrderDetails(){
-        String currentDate = getCurrentMonth();
-        Map<String, Object> orderMonthMap = new HashMap<>();
+
+    public List<Orders> getDayOrders(){
+        String currentDate = getCurrentDate();
+        Map<String, Object> orderDayMap = new HashMap<>();
         //todo 待优化
-        orderMonthMap.put("limit", 1000);
-        orderMonthMap.put("beginTime", currentDate + " 00:00:00");
-        orderMonthMap.put("endTime", currentDate + " 23:59:59");
-        OrderPageResponse<OrderVO> orderDayResponse = orderFeignClient.getOrderList(orderMonthMap);
-        List<OrderVO> dayOrders = orderDayResponse.getData();
-        List<OrderDetail> dayOrderDetails = new ArrayList<>();
-        dayOrders.forEach(orderVO -> {
-            List<OrderDetail> orderDetails = orderVO.getOrderDetails();
-            dayOrderDetails.addAll(orderDetails);
+        orderDayMap.put("limit", 1000);
+        orderDayMap.put("beginTime", currentDate + " 00:00:00");
+        orderDayMap.put("endTime", currentDate + " 23:59:59");
+        OrderPageResponse<OrderVO> orderDayResponse = orderFeignClient.getOrderList(orderDayMap);
+        List<OrderVO> dayOrderVOs = orderDayResponse.getData();
+        List<Orders> dayOrders = new ArrayList<>();
+        dayOrderVOs.forEach(orderVO -> {
+            if(orderVO.getStatus() != OrderStatus.UNPAID && orderVO.getStatus() != OrderStatus.INVALID){
+                Orders orders = new Orders();
+                BeanUtils.copyProperties(orderVO, orders);
+                dayOrders.add(orders);
+            }
         });
-        return dayOrderDetails;
+        return dayOrders;
     }
 
     private String getCurrentTime(){

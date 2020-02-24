@@ -23,4 +23,9 @@ public class TaskApplicationTests {
     public void foodStatistics(){
         foodTask.foodStatistics();
     }
+
+    @Test
+    public void orderStatistics(){
+        foodTask.orderStatistics();
+    }
 }
