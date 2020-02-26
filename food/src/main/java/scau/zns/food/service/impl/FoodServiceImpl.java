@@ -75,6 +75,7 @@ public class FoodServiceImpl implements FoodService {
         if(food != null && food.getcId() != null){
             criteria.andEqualTo("cId", food.getcId());
         }
+        example.setOrderByClause("create_time desc");
         PageHelper.startPage(pageRequest.getPage(), pageRequest.getLimit());
         Page<Food> foods = (Page)foodMapper.selectByExample(example);
         return new BasePageResponse<>(convert(foods), foods.getTotal());
@@ -184,6 +185,18 @@ public class FoodServiceImpl implements FoodService {
             throw new FoodBusinessException("更新订单状态失败！！");
         }
         return BaseResponse.success();
+    }
+
+    @Override
+    public BasePageResponse<FoodVO> foodRange(Integer type, Integer top) {
+        List<Food> foods = new ArrayList<>();
+        List<SalesStatistics> foodRange = salesStatisticsMapper.getFoodRange(type, top);
+        for(SalesStatistics salesStatistics : foodRange){
+            Integer foodId = Integer.parseInt(salesStatistics.getTargetId());
+            Food food = foodMapper.selectByPrimaryKey(foodId);
+            foods.add(food);
+        }
+        return new BasePageResponse<>(convert(foods), (long) foods.size());
     }
 
     public void checkEmptyFood(Food food){

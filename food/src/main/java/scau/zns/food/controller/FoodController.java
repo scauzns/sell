@@ -26,7 +26,7 @@ public class FoodController {
     private FoodService foodService;
 
     @GetMapping("/query/{foodId}")
-    public BaseResponse queryFood(@PathVariable("foodId") Integer id){
+    public BaseResponse queryFood(Integer id){
         return foodService.query(id);
     }
 
@@ -87,4 +87,10 @@ public class FoodController {
     public BaseResponse newComment(@RequestBody List<Comment> comments){
         return foodService.addComment(comments);
     }
+
+    @GetMapping("/getFoodRange")
+    public BasePageResponse<FoodVO> getFoodRange(Integer type, Integer top){
+        return foodService.foodRange(type, top);
+    }
+
 }

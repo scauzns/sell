@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.6.RELEASE</version>
+        <version>2.0.3.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>scau.zns</groupId>
@@ -17,10 +17,15 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
     </properties>
+
+
 
     <dependencyManagement>
         <dependencies>
+
+
             <!-- tkmybatis -->
             <dependency>
                 <groupId>tk.mybatis</groupId>
@@ -59,8 +64,27 @@
                 <version>3.0.3</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
+
     </dependencyManagement>
+
+
+
+    <repositories>
+        <repository>
+            <id>aliyun</id>
+            <name>aliyun</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </repository>
+    </repositories>
+
 
     <build>
         <plugins>
@@ -78,5 +102,6 @@
         <module>user</module>
         <module>task</module>
         <module>client</module>
+        <module>eureka</module>
     </modules>
 </project>

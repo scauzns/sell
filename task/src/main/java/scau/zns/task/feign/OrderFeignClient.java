@@ -13,7 +13,8 @@ import scau.zns.task.vo.OrderVO;
 import java.math.BigDecimal;
 import java.util.Map;
 
-@FeignClient(name = "order", url = URIs.ORDER_SERVER)
+//@FeignClient(name = "order", url = URIs.ORDER_SERVER)
+@FeignClient(name = "order-service")
 public interface OrderFeignClient {
     @PostMapping(URIs.ORDER_COMMIT)
     BaseResponse commitOrder(@RequestBody OrderVO orderVO);

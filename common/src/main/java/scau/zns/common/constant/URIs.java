@@ -14,6 +14,7 @@ public interface URIs {
     String UPDATE_FOOD = "/food/update";
     String UPLOAD_FOOD_IMG = "/food/upload/img";
     String FOOD_COMMENT = "/food/newComment";
+    String FOOD_RANGE = "/food/getFoodRange";
 
     //用户服务URI
     String USER_SERVER = "http://localhost:8062";

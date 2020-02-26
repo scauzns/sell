@@ -1,6 +1,9 @@
 
 #数据库配置
 spring:
+  application:
+    # 注册到Eureka的服务名
+    name: order-service
   datasource:
     username: root
     password: scauzns
@@ -20,3 +23,9 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 server:
   port: 8063
+
+#指定注册中心地址
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8065/eureka/

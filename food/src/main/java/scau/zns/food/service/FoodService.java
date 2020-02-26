@@ -17,4 +17,6 @@ public interface FoodService {
     BaseResponse update(Food food);
     //新增评价
     BaseResponse addComment(List<Comment> comments);
+    //销量排行榜
+    BasePageResponse<FoodVO> foodRange(Integer type, Integer top);
 }

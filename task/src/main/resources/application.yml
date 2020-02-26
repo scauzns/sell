@@ -1,6 +1,9 @@
 
 #数据库配置
 spring:
+  application:
+    # 注册到Eureka的服务名
+    name: task-service
   datasource:
     username: root
     password: scauzns
@@ -25,3 +28,9 @@ task:
   corePoolSize: 5
   maxPoolSize: 25
   qCapacity: 10
+
+#指定注册中心地址
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8065/eureka/

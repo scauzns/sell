@@ -55,4 +55,7 @@ public interface FoodFeignClient {
 
     @PostMapping(URIs.FOOD_COMMENT)
     BaseResponse newComment(@RequestBody List<Comment> comments);
+
+    @GetMapping(URIs.FOOD_RANGE)
+    BasePageResponse<FoodVO> getFoodRange(@RequestParam("type") Integer type, @RequestParam("top") Integer top);
 }

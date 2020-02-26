@@ -145,4 +145,10 @@ public class FoodHandler {
     public BaseResponse addComment(@RequestBody List<Comment> comments){
         return foodFeignClient.newComment(comments);
     }
+
+    @GetMapping("/getFoodRange")
+    @ResponseBody
+    public BasePageResponse<FoodVO> getFoodRange(Integer type, Integer top){
+        return foodFeignClient.getFoodRange(type, top);
+    }
 }

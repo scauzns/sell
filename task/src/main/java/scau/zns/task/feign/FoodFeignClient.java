@@ -18,7 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 
-@FeignClient(name = "food", url = URIs.FOOD_SERVER, configuration = MultipartSupportConfig.class)
+//@FeignClient(name = "food", url = URIs.FOOD_SERVER, configuration = MultipartSupportConfig.class)
+@FeignClient(name = "food-service", configuration = MultipartSupportConfig.class)
 public interface FoodFeignClient {
 
     @GetMapping(URIs.FOOD_LIST)

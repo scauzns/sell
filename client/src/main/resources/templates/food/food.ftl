@@ -45,7 +45,7 @@
             <a class="layui-btn layui-btn-radius layui-btn-danger data-count-delete" lay-event="delete">删除</a>
         </script>
         <script type="text/html" id="img_templet">
-            <img class="layui-upload-img" width="120px" src="http://localhost:8061{{d.cover}}"/>
+            <img class="layui-upload-img" width="120px" src="http://localhost:8060{{d.cover}}"/>
         </script>
 
     </div>
