@@ -3,29 +3,37 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>类目列表</title>
+    <title>商品列表</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="<@spring.url "/layuimini/lib/layui-v2.5.4/css/layui.css"/>" media="all">
     <link rel="stylesheet" href="<@spring.url "/layuimini/css/public.css"/>" media="all">
+
 </head>
 <body>
 <div class="layuimini-container">
     <div class="layuimini-main">
-        <table class="layui-hide" id="categoryTable" lay-filter="currentTableFilter"></table>
+        <table class="layui-hide" id="userTable" lay-filter="currentTableFilter"></table>
+        <script type="text/html" id="foodTableBar">
+            <a class="layui-btn layui-btn-radius layui-btn-normal" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-radius layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+        <script type="text/html" id="img_templet">
+            <img class="layui-upload-img" width="120px" src="http://localhost:8060{{d.cover}}"/>
+        </script>
+
     </div>
-    <script type="text/html" id="categoryTableBarHead">
-        <div class="layui-btn-container">
-            <button class="layui-btn data-add-btn" lay-event="insert">添加</button>
-            <button class="layui-btn layui-btn-danger data-delete-btn" lay-event="deleteAll">删除</button>
-        </div>
-    </script>
-    <script type="text/html" id="categoryTableBar">
-        <a class="layui-btn layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
-    </script>
 </div>
+
+<#--设置table每一行的高度，适应列元素的最大高度-->
+<style type="text/css">
+    .layui-table-cell {
+        height: auto;
+        line-height: 28px;
+    }
+</style>
+
 <script src="<@spring.url "/layuimini/lib/layui-v2.5.4/layui.js"/>" charset="utf-8"></script>
 <script>
     layui.use(['form', 'table'], function () {
@@ -34,20 +42,45 @@
             table = layui.table;
 
         table.render({
-            elem: '#categoryTable',
-            toolbar: '#categoryTableBarHead',
-            url: 'http://localhost:8066/foodService/foodCategory/list',
+            elem: '#userTable',
+            url: 'http://localhost:8066/userService/user/list',
             cols: [[
-                {type: "checkbox",  fixed: "left"},
-                {field: 'id',  title: 'ID', sort: true},
-                {field: 'cName',  title: '类目名称'},
-                {field: 'cDesc',title: '类目名称'},
-                {field: 'createTime',  title: '创建时间'},
-                {title: '操作', minWidth: 50, templet: '#categoryTableBar', fixed: "right", align: "center"}
+                {field: 'name',  title: '昵称'},
+                {field: 'phone',title: '手机号码'},
+                {field: 'gender',title: '性别', templet: function (d) {
+                        if(d.gender === 0){
+                            return '男';
+                        }else{
+                            return '女';
+                        }
+                    }},
+                {field: 'status',title: '状态', templet: function (d) {
+                        if(d.status === 0){
+                            return '正常';
+                        }else{
+                            return '已冻结';
+                        }
+                    }},
+                {field: 'cover',title: '图片', templet: '#img_templet'},
+                {field: 'createTime',  title: '注册时间'}
             ]],
             limits: [10, 15, 20, 25, 50, 100],
             limit: 10,
             page: true
+        });
+
+        // 监听搜索操作
+        form.on('submit(data-search-btn)', function (data) {
+            var field = data.field;
+            //执行搜索重载
+            table.reload('foodTable', {
+                page: {
+                    curr: 1
+                }
+                , where: field
+            });
+
+            return false;
         });
 
 
@@ -55,7 +88,6 @@
         table.on('toolbar(currentTableFilter)', function(obj) {
             switch(obj.event){
                 case 'insert' :
-                    console.log("新增事件");
                     toInsert();
                     break;
             }
@@ -81,42 +113,45 @@
             layer.open({
                 type: 2
                 , skin: 'layui-layer-rim' //加上边框
-                , area: ['500px', '250px']
-                , title: '添加类目'
-                , content: ['/foodRouter/toInsertCategory', 'no']
+                , area: ['500px', '550px']
+                , title: '添加食物'
+                , content: ['/foodRouter/toAddFood', 'no']
             });
         };
 
         var toEdit = function (data) {
             layer.open({
                 type: 2
+                , scrollbar : true
                 , skin: 'layui-layer-rim' //加上边框
-                , area: ['500px', '250px']
+                , area: ['400px', '460px']
                 , title: '编辑'
-                , content: ['/foodRouter/toEditCategory', 'no']
+                , content: ['/foodRouter/toEditFood', 'no']
                 , success: function (layero, index) {
                     var body = layer.getChildFrame('body', index);
                     var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
                     // console.log(body.html()); //得到iframe页的body内容
                     //初始化表单数据的值
                     body.find("#id").val(data.id);
-                    body.find("#cName").val(data.cName);
-                    body.find("#cDesc").val(data.cDesc);
+                    body.find("#title").val(data.title);
+                    body.find("#fDesc").val(data.fDesc);
+                    body.find("#price").val(data.price);
+                    body.find("#cId").find("option[value='" + data.cId +"']").attr("selected",true);
                 }
             });
         };
 
-        var toDel = function(cId){
+        var toDel = function(foodId){
             layer.confirm('确认删除?', function(index){
                 $.ajax({
-                    url: "http://localhost:8066/foodService/foodCategory/del/" + cId,
+                    url: "http://localhost:8066/foodService/food/del/" + foodId,
                     dataType : "json",
                     contentType : "application/json; charset=utf-8",
                     type : "GET",
                     success : function(data){
                         if(data.code === 0){
                             layer.msg(data.msg);
-                            table.reload('categoryTable'); //数据刷新
+                            table.reload('foodTable'); //数据刷新
                             layer.close(index); //关闭弹层
                         }else{
                             layer.msg(data.msg);

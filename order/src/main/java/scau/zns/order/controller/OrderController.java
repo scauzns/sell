@@ -40,6 +40,11 @@ public class OrderController {
         return orderService.queryOrder(orderId);
     }
 
+    @GetMapping("/queryOrderDetails")
+    public BaseResponse queryOrderDetails(String orderId){
+        return orderService.queryOrderDetails(orderId);
+    }
+
     @GetMapping("/orderList")
     public BasePageResponse<OrderVO> getOrderList(OrderPageRequest request){
         return orderService.orderList(request);

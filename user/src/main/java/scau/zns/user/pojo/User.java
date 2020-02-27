@@ -1,5 +1,7 @@
 package scau.zns.user.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.Column;
 import javax.persistence.Id;
 import java.util.Date;
@@ -47,9 +49,11 @@ public class User {
     private Byte status;
 
     @Column(name = "create_time")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date createTime;
 
     @Column(name = "update_time")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
     private Date updateTime;
 
     public String getId() {

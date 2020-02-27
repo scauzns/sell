@@ -83,7 +83,7 @@
 
         upload.render({
             elem: '#upload_img'
-            ,url: '/foodService/uploadFoodImg'
+            ,url: 'http://localhost:8066/foodService/food/upload/img'
             // ,auto: false //选择文件后不自动上传
             // ,bindAction: '#formSubmit' //指向一个按钮触发上传
             ,choose: function(obj){
@@ -125,7 +125,7 @@
             var index = parent.layer.getFrameIndex(window.name);//获取当前弹出层的层级
             var field = data.field;
             $.ajax({
-                url:'/foodService/addFood',
+                url:'http://localhost:8066/foodService/food/add',
                 data : JSON.stringify(field),
                 dataType : "json",
                 contentType : "application/json; charset=utf-8",

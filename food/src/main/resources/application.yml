@@ -1,0 +1,30 @@
+#数据库配置
+spring:
+  application:
+    # 注册到Eureka的服务名
+    name: food-service
+  datasource:
+    username: root
+    password: scauzns
+    url: jdbc:mysql://localhost:3306/sell?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT%2B8&autoReconnect=true&useSSL=false
+    driver-class-name: com.mysql.jdbc.Driver
+  # freemarker相关配置, 可省略
+#  freemarker:
+#    suffix: .ftl
+#    charset: UTF-8
+#    enabled: true
+#    template-loader-path: classpath:/templates/
+
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+  # 打印sql，线上环境要关闭
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  port: 8061
+
+#指定注册中心地址
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8065/eureka/

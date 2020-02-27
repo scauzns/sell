@@ -25,13 +25,13 @@
           "child": [
             {
               "title": "类目列表",
-              "href": "/foodService/categoryList",
+              "href": "/foodRouter/categoryList",
               "icon": "fa fa-list-alt",
               "target": "_self"
             },
             {
               "title": "商品列表",
-              "href": "/foodService/foodList",
+              "href": "/foodRouter/foodList",
               "icon": "fa fa-navicon",
               "target": "_self"
             }
@@ -45,7 +45,21 @@
           "child": [
             {
               "title": "用户列表",
-              "href": "/foodService/categoryList",
+              "href": "/userRouter/userList",
+              "icon": "fa fa-list-alt",
+              "target": "_self"
+            }
+          ]
+        },
+        {
+          "title": "订单管理",
+          "href": "",
+          "icon": "fa fa-child",
+          "target": "_self",
+          "child": [
+            {
+              "title": "订单列表",
+              "href": "/orderRouter/orderList",
               "icon": "fa fa-list-alt",
               "target": "_self"
             }

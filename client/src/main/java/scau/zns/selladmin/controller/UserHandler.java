@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import scau.zns.common.base.BasePageResponse;
 import scau.zns.common.base.BaseResponse;
 import scau.zns.selladmin.feign.UserFeignClient;
@@ -17,12 +18,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/userService")
+@RequestMapping("/userRouter")
 public class UserHandler {
     @Autowired
     private UserFeignClient userFeignClient;
 
-    @PostMapping("/regist")
+    @RequestMapping("/userList")
+    public ModelAndView userList(){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("user/user");
+        return mv;
+    }
+
+
+    /*@PostMapping("/regist")
     @ResponseBody
     public BaseResponse userRegister(@RequestBody User user){
         return userFeignClient.userRegister(user);
@@ -70,5 +79,5 @@ public class UserHandler {
         Map<String, Object> map = new HashMap<>();
         map.put("content", userSearch.getContent());
         return userFeignClient.userSearch(map);
-    }
+    }*/
 }

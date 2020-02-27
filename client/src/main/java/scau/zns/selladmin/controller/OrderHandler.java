@@ -3,6 +3,7 @@ package scau.zns.selladmin.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import scau.zns.common.base.BasePageRequest;
 import scau.zns.common.base.BaseResponse;
 import scau.zns.selladmin.feign.OrderFeignClient;
@@ -16,13 +17,28 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/orderService")
+@RequestMapping("/orderRouter")
 public class OrderHandler {
 
     @Autowired
     private OrderFeignClient orderFeignClient;
 
-    @PostMapping("/commitOrder")
+    @RequestMapping("/orderList")
+    public ModelAndView userList(){
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("order/order");
+        return mv;
+    }
+
+    @RequestMapping("/getOrderDetails")
+    public ModelAndView getOrderDetails(String orderId){
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("orderId", orderId);
+        mv.setViewName("order/orderDetails");
+        return mv;
+    }
+
+    /*@PostMapping("/commitOrder")
     @ResponseBody
     public BaseResponse commitOrder(@RequestBody OrderVO orderVO){
         return orderFeignClient.commitOrder(orderVO);
@@ -46,7 +62,7 @@ public class OrderHandler {
         return orderFeignClient.queryOrder(orderId);
     }
 
-    @GetMapping("/orderList")
+    @GetMapping("/getOrderList")
     @ResponseBody
     public OrderPageResponse<OrderVO> getOrderList(OrderPageRequest request){
         Map<String, Object> map = new HashMap<>();
@@ -58,5 +74,5 @@ public class OrderHandler {
         map.put("page", request.getPage());
         map.put("limit", request.getLimit());
         return orderFeignClient.getOrderList(map);
-    }
+    }*/
 }

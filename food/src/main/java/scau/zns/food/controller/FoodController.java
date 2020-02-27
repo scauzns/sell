@@ -26,7 +26,7 @@ public class FoodController {
     private FoodService foodService;
 
     @GetMapping("/query/{foodId}")
-    public BaseResponse queryFood(Integer id){
+    public BaseResponse queryFood(@PathVariable("foodId") Integer id){
         return foodService.query(id);
     }
 

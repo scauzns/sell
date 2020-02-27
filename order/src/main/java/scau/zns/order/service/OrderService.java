@@ -22,6 +22,9 @@ public interface OrderService {
     //查询订单
     BaseResponse queryOrder(String orderId);
 
+    //查询订单明细
+    BaseResponse queryOrderDetails(String orderId);
+
     //更新订单状态
     BaseResponse updateOrderStatus(String orderId, int status);
 }

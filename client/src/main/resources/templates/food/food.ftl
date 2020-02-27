@@ -69,7 +69,7 @@
         table.render({
             elem: '#foodTable',
             toolbar: '#foodTableBarHead',
-            url: '/foodService/getFoodList',
+            url: 'http://localhost:8066/foodService/food/list',
             cols: [[
                 {field: 'id',  title: 'ID', width: 70, sort: true},
                 {field: 'cName',  title: '类目名称'},
@@ -133,7 +133,7 @@
                 , skin: 'layui-layer-rim' //加上边框
                 , area: ['500px', '550px']
                 , title: '添加食物'
-                , content: ['/foodService/toAddFood', 'no']
+                , content: ['/foodRouter/toAddFood', 'no']
             });
         };
 
@@ -144,7 +144,7 @@
                 , skin: 'layui-layer-rim' //加上边框
                 , area: ['400px', '460px']
                 , title: '编辑'
-                , content: ['/foodService/toEditFood', 'no']
+                , content: ['/foodRouter/toEditFood', 'no']
                 , success: function (layero, index) {
                     var body = layer.getChildFrame('body', index);
                     var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
@@ -162,7 +162,7 @@
         var toDel = function(foodId){
             layer.confirm('确认删除?', function(index){
                 $.ajax({
-                    url: "/foodService/delFood/" + foodId,
+                    url: "http://localhost:8066/foodService/food/del/" + foodId,
                     dataType : "json",
                     contentType : "application/json; charset=utf-8",
                     type : "GET",

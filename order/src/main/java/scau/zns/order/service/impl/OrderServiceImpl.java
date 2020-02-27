@@ -127,6 +127,19 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public BaseResponse queryOrderDetails(String orderId) {
+        Orders order = orderMapper.selectByPrimaryKey(orderId);
+        if(order == null){
+            return new BaseResponse(ResponseCode.FAILED, "订单不存在！");
+        }
+        Example example = new Example(OrderDetail.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("orderId", orderId);
+        List<OrderDetail> orderDetails = orderDetailMapper.selectByExample(example);
+        return new BasePageResponse<>(orderDetails, (long) orderDetails.size());
+    }
+
+    @Override
     @Transactional
     public BaseResponse updateOrderStatus(String orderId, int status) {
         Orders order = new Orders();

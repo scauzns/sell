@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/foodService")
+@RequestMapping("/foodRouter")
 public class FoodHandler {
 
     @Autowired
@@ -73,7 +73,7 @@ public class FoodHandler {
         mv.setViewName("food/editFood");
         return mv;
     }
-
+/*
 
     @GetMapping("/getFoodList")
     @ResponseBody
@@ -150,5 +150,5 @@ public class FoodHandler {
     @ResponseBody
     public BasePageResponse<FoodVO> getFoodRange(Integer type, Integer top){
         return foodFeignClient.getFoodRange(type, top);
-    }
+    }*/
 }

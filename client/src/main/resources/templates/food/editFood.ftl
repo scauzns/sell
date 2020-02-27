@@ -74,7 +74,7 @@
                 var index = parent.layer.getFrameIndex(window.name);//获取当前弹出层的层级
                 var field = data.field;
                 $.ajax({
-                    url:'/foodService/updateFood',
+                    url:'http://localhost:8066/foodService/food/update',
                     data : JSON.stringify(field),
                     dataType : "json",
                     contentType : "application/json; charset=utf-8",
